@@ -14,9 +14,8 @@ GameObject:
   - component: {fileID: 5174306763965908085}
   - component: {fileID: 5174306763965908084}
   - component: {fileID: 263324832}
-  - component: {fileID: 844035398276676415}
   m_Layer: 0
-  m_Name: Platform
+  m_Name: PlatformRectangle
   m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5174306763965908043}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -4, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 0.5, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -98,6 +97,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fMoveSpeed: 40
   fMovementSmoothing: 0.05
+  bReverseMovement: 0
 --- !u!61 &5174306763965908085
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -107,7 +107,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 5174306763965908043}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: bac53924c63c67d43af7724e22f480e5, type: 2}
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -171,22 +171,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.8520215, y: 0.19946289}
   m_EdgeRadius: 0
---- !u!95 &844035398276676415
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5174306763965908043}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 63cb4b130dadf1f4781347d13b787891, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0

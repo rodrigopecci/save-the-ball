@@ -8,23 +8,19 @@ public class BallController : MonoBehaviour
     private float fPushForce = 10f;
 
     private int iPushCount;
-    private bool bGameOver;
 
     private Rigidbody2D rb;
+    private Animator anim;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-    }
-
-    private void Update()
-    {
-
+        anim = GetComponent<Animator>();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (bGameOver)
+        if (GameManager.instance.bGameOver)
         {
             return;
         }
@@ -32,10 +28,12 @@ public class BallController : MonoBehaviour
         if (other.tag == "Platform")
         {
             rb.velocity = new Vector2(rb.velocity.x, fPushForce);
+            anim.SetTrigger("Squash");
 
             iPushCount++;
+            GameManager.instance.iScore++;
 
-            //SoundManager.instance.JumpSoundFX();
+            SoundManager.instance.JumpSoundFX();
         }
 
         if (iPushCount == 4)
@@ -46,9 +44,9 @@ public class BallController : MonoBehaviour
 
         if (other.tag == "GameOver")
         {
-            bGameOver = true;
+            GameManager.instance.bGameOver = true;
 
-            //SoundManager.instance.GameOverSoundFX();
+            SoundManager.instance.GameOverSoundFX();
 
             GameManager.instance.RestartGame();
         }

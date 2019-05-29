@@ -11,17 +11,18 @@ public class PlatformController : MonoBehaviour
     [SerializeField]
     private float fMovementSmoothing = .05f;
 
+    [SerializeField]
+    private bool bReverseMovement = false;
+
     private float fHorizontalMovement = 0f;
 
     private Rigidbody2D rb;
-    private Animator anim;
 
     private Vector3 v3Velocity = Vector3.zero;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
     }
 
     private void Update()
@@ -31,22 +32,34 @@ public class PlatformController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GameManager.instance.bGameOver)
+        {
+            return;
+        }
+
         Move();
     }
 
     void Move()
     {
-        Vector3 targetVelocity = new Vector2(fHorizontalMovement * 10f * Time.deltaTime, rb.velocity.y);
+        Vector3 targetVelocity = new Vector2(fHorizontalMovement * 10f * Time.deltaTime * (GameManager.instance.bReverseMovement ? -1 : 1), rb.velocity.y);
+
         // And then smoothing it out and applying it to the character
         rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref v3Velocity, fMovementSmoothing);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Ball")
+        if (this.gameObject.tag != "FirstPlatform" && other.tag == "Ball")
         {
-            //other.gameObject.SetActive(false);
-            anim.SetTrigger("Destroy");
+            if (bReverseMovement)
+            {
+                GameManager.instance.bReverseMovement = !GameManager.instance.bReverseMovement;
+            }
+
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.gravityScale = 1f;
+
             Destroy(this.gameObject, 2f);
         }
     }

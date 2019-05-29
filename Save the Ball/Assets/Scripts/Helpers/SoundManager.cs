@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static SoundManager instance;
+
+    [SerializeField]
+    private AudioSource soundFX;
+
+    [SerializeField]
+    private AudioClip jumpClip, gameOverClip;
+
+    private void Awake()
     {
-        
+        if (instance == null)
+        {
+            instance = this;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void JumpSoundFX()
     {
-        
+        soundFX.clip = jumpClip;
+        soundFX.Play();
+    }
+
+    public void GameOverSoundFX()
+    {
+        soundFX.clip = gameOverClip;
+        soundFX.Play();
     }
 }
