@@ -7,7 +7,7 @@ TagManager:
   - Platform
   - GameOver
   - Ball
-  - FirstPlatform
+  - PlatformBase
   layers:
   - Default
   - TransparentFX

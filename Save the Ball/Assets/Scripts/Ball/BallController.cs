@@ -11,11 +11,14 @@ public class BallController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Animator anim;
+    private CameraShake cameraShake;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
+        cameraShake = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraShake>();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -25,15 +28,16 @@ public class BallController : MonoBehaviour
             return;
         }
 
-        if (other.tag == "Platform")
+        if (other.tag == "Platform" || other.tag == "PlatformBase")
         {
             rb.velocity = new Vector2(rb.velocity.x, fPushForce);
-            anim.SetTrigger("Squash");
+            StartCoroutine(SquashCoroutine());
+        }
 
+        if (other.tag == "Platform")
+        {
             iPushCount++;
-            GameManager.instance.iScore++;
-
-            SoundManager.instance.JumpSoundFX();
+            GameManager.instance.IncrementScore();
         }
 
         if (iPushCount == 4)
@@ -44,11 +48,17 @@ public class BallController : MonoBehaviour
 
         if (other.tag == "GameOver")
         {
-            GameManager.instance.bGameOver = true;
-
             SoundManager.instance.GameOverSoundFX();
-
-            GameManager.instance.RestartGame();
+            GameManager.instance.GameOver();
         }
+    }
+
+    IEnumerator SquashCoroutine()
+    {
+        yield return null;
+
+        cameraShake.Shake();
+        anim.SetTrigger("Squash");
+        SoundManager.instance.JumpSoundFX();
     }
 }

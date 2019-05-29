@@ -50,7 +50,7 @@ public class PlatformController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (this.gameObject.tag != "FirstPlatform" && other.tag == "Ball")
+        if (this.gameObject.tag != "PlatformBase" && other.tag == "Ball")
         {
             if (bReverseMovement)
             {
