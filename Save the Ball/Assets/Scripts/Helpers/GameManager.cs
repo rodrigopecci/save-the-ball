@@ -16,9 +16,12 @@ public class GameManager : MonoBehaviour
     public int iScore = 0;
     private int iHighscore = 0;
 
-    public float fDifficultyMultiplier = 0.5f;
     public bool bReverseMovement = false;
-    public bool bGameOver;
+
+    public bool bGamePaused = false;
+    public bool bGameOver = false;
+
+    public float fDifficultyMultiplier = 0.8f;
 
     private void Awake()
     {

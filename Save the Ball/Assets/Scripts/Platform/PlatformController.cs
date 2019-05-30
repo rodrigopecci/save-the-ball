@@ -6,7 +6,7 @@ public class PlatformController : MonoBehaviour
 {
     [SerializeField]
     private float fMoveSpeed = 40f;
-
+    
     [Range(0, .3f)]
     [SerializeField]
     private float fMovementSmoothing = .05f;
@@ -19,6 +19,7 @@ public class PlatformController : MonoBehaviour
     private Rigidbody2D rb;
 
     private Vector3 v3Velocity = Vector3.zero;
+    private Vector3 v3LastTouchPosition;
 
     private void Start()
     {
@@ -37,15 +38,38 @@ public class PlatformController : MonoBehaviour
             return;
         }
 
-        Move();
+        //Move();
+        Touch();
     }
 
     void Move()
     {
         Vector3 targetVelocity = new Vector2(fHorizontalMovement * 10f * Time.deltaTime * (GameManager.instance.bReverseMovement ? -1 : 1), rb.velocity.y);
-
-        // And then smoothing it out and applying it to the character
         rb.velocity = Vector3.SmoothDamp(rb.velocity, targetVelocity, ref v3Velocity, fMovementSmoothing);
+    }
+
+    void Touch()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            Vector3 v3TouchPosition = Camera.main.ScreenToWorldPoint(touch.position);
+            v3TouchPosition.z = 0;
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                v3LastTouchPosition = v3TouchPosition;
+            }
+
+            if (touch.phase == TouchPhase.Moved)
+            {
+                Vector3 direction = (v3TouchPosition - v3LastTouchPosition);
+                transform.position = new Vector2((transform.position.x + direction.x * (GameManager.instance.bReverseMovement ? -2f : 2f)), transform.position.y);
+
+                v3LastTouchPosition = v3TouchPosition;
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -63,4 +87,10 @@ public class PlatformController : MonoBehaviour
             Destroy(this.gameObject, 2f);
         }
     }
+}
+
+enum PlatformType
+{
+    Retangle,
+    Triangle
 }

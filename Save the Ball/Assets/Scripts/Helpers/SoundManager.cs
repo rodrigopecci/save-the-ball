@@ -22,13 +22,19 @@ public class SoundManager : MonoBehaviour
 
     public void JumpSoundFX()
     {
-        soundFX.clip = jumpClip;
-        soundFX.Play();
+        if (!GameManager.instance.bGamePaused)
+        {
+            soundFX.clip = jumpClip;
+            soundFX.Play();
+        }
     }
 
     public void GameOverSoundFX()
     {
-        soundFX.clip = gameOverClip;
-        soundFX.Play();
+        if (!GameManager.instance.bGamePaused)
+        {
+            soundFX.clip = gameOverClip;
+            soundFX.Play();
+        }
     }
 }
