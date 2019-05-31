@@ -38,7 +38,7 @@ public class PlatformController : MonoBehaviour
             return;
         }
 
-        //Move();
+        Move();
         Touch();
     }
 
@@ -65,7 +65,11 @@ public class PlatformController : MonoBehaviour
             if (touch.phase == TouchPhase.Moved)
             {
                 Vector3 direction = (v3TouchPosition - v3LastTouchPosition);
-                transform.position = new Vector2((transform.position.x + direction.x * (GameManager.instance.bReverseMovement ? -2f : 2f)), transform.position.y);
+                Debug.Log(direction.x);
+                if (Mathf.Abs(direction.x) < 0.5f)
+                {
+                    transform.position = new Vector2((transform.position.x + direction.x * (GameManager.instance.bReverseMovement ? -2f : 2f)), transform.position.y);
+                }
 
                 v3LastTouchPosition = v3TouchPosition;
             }
