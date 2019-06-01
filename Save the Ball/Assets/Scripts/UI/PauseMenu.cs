@@ -17,13 +17,17 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         this.gameObject.SetActive(false);
-        UnfreezeGame();
+
+        Time.timeScale = 1f;
+        GameManager.instance.bGamePaused = false;
     }
 
     public void Pause()
     {
+        Time.timeScale = 0f;
+        GameManager.instance.bGamePaused = true;
+
         this.gameObject.SetActive(true);
-        FreezeGame();
     }
 
     public void LoadHowToPlayMenu()
@@ -35,17 +39,5 @@ public class PauseMenu : MonoBehaviour
     public void Quit()
     {
         Application.Quit();
-    }
-
-    public void FreezeGame()
-    {
-        Time.timeScale = 0.5f;
-        GameManager.instance.bGamePaused = true;
-    }
-
-    public void UnfreezeGame()
-    {
-        Time.timeScale = 1f;
-        GameManager.instance.bGamePaused = false;
     }
 }

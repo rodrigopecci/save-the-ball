@@ -38,7 +38,7 @@ public class PlatformController : MonoBehaviour
             return;
         }
 
-        Move();
+        //Move();
         Touch();
     }
 
