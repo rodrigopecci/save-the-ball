@@ -33,7 +33,7 @@ public class PlatformController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (GameManager.instance.bGameOver)
+        if (GameManager.instance.bGamePaused)
         {
             return;
         }
@@ -78,7 +78,7 @@ public class PlatformController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (this.gameObject.tag != "PlatformBase" && other.tag == "Ball")
+        if (this.gameObject.tag != "PlatformStart" && this.gameObject.tag != "PlatformEnd" && other.tag == "Ball")
         {
             if (bReverseMovement)
             {

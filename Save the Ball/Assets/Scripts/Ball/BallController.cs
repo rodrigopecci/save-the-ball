@@ -23,27 +23,21 @@ public class BallController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (GameManager.instance.bGameOver)
+        if (GameManager.instance.bGamePaused)
         {
             return;
         }
 
-        if (other.tag == "Platform" || other.tag == "PlatformBase")
+        if (other.tag == "Platform" || other.tag == "PlatformStart")
         {
             rb.velocity = new Vector2(rb.velocity.x, fPushForce);
             StartCoroutine(SquashCoroutine());
         }
 
-        if (other.tag == "Platform")
+        if (other.tag == "PlatformEnd")
         {
-            iPushCount++;
-            GameManager.instance.IncrementScore();
-        }
-
-        if (iPushCount == 4)
-        {
-            iPushCount = 0;
-            PlatformSpawner.instance.SpawnPlatforms();
+            SoundManager.instance.FinishSoundFX();
+            GameManager.instance.LevelPassed();
         }
 
         if (other.tag == "GameOver")

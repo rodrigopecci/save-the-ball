@@ -6,7 +6,17 @@ using GoogleMobileAds.Api;
 
 public class AdManager : MonoBehaviour
 {
+    public static AdManager instance;
+
     private InterstitialAd interstitial;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
 
     private void Start()
     {

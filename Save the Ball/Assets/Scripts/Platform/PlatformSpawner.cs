@@ -7,15 +7,12 @@ public class PlatformSpawner : MonoBehaviour
     public static PlatformSpawner instance;
 
     [SerializeField]
-    private GameObject goPlatform, goPlatformReverse;
-
-    private float fLeftMinX = -2.5f, fLeftMaxX = -1.5f, fRightMinX = 2.5f, fRightMaxX = 1.5f;
-    private float fScaleMin = 0.5f, fScaleMax = 1f;
-    private float fTresholdY = 2f;
-    private float fLastY;
+    private GameObject goPlatform, goPlatformReverse, goPlatformEnd;
 
     [SerializeField]
-    private int iSpawnCount = 8;
+    private List<Level> levels = new List<Level>();
+
+    private float fLastY;
 
     [SerializeField]
     private Transform tPlatformParent;
@@ -37,34 +34,47 @@ public class PlatformSpawner : MonoBehaviour
 
     public void SpawnPlatforms()
     {
-        Vector2 v2tmp = transform.position;
-        GameObject newPlatform = null;
+        Level level = levels[GameManager.instance.iLevel-1];
 
-        float fPlatformMultiplier = ((GameManager.instance.iScore * GameManager.instance.fDifficultyMultiplier) > 80f ? 80f : (GameManager.instance.iScore * GameManager.instance.fDifficultyMultiplier));
-        float fScaleMinMultiplier = (fScaleMin - (fPlatformMultiplier * 0.01f) < 0.1f ? 0.1f : fScaleMin - (fPlatformMultiplier * 0.01f));
-        float fScaleMaxMultiplier = (fScaleMax - (fPlatformMultiplier * 0.01f) < 0.2f ? 0.2f : fScaleMax - (fPlatformMultiplier * 0.01f));
-
-        //Debug.Log("iScore: " + GameManager.instance.iScore + " - fDifficultyMultiplier : " + GameManager.instance.fDifficultyMultiplier + " - multi : " + GameManager.instance.iScore * GameManager.instance.fDifficultyMultiplier);
-        //Debug.Log("fScaleMinMultiplier : " + fScaleMinMultiplier + " - fScaleMaxMultiplier : " + fScaleMaxMultiplier);
-
-        for (int i = 0; i < iSpawnCount; i++)
+        if (level != null)
         {
-            v2tmp.y = fLastY;
+            Vector2 v2tmp = transform.position;
+            GameObject newPlatform = null;
+            
+            int numberOfReversePlatforms = level.iNumberOfReversePlatforms;
 
-            if (Random.Range(0, 10) > 5)
+            for (int i = 0; i < level.iNumberOfPlatforms; i++)
             {
-                v2tmp.x = Random.Range(fLeftMinX, fLeftMaxX);
-                newPlatform = Instantiate((Random.Range(0f, 100f) > fPlatformMultiplier ? goPlatform : goPlatformReverse), v2tmp, Quaternion.identity);
-            } else
-            {
-                v2tmp.x = Random.Range(fRightMinX, fRightMaxX);
-                newPlatform = Instantiate((Random.Range(0f, 100f) > fPlatformMultiplier ? goPlatform : goPlatformReverse), v2tmp, Quaternion.identity);
+                v2tmp.y = fLastY;
+
+                if (Random.Range(0, 10) > 5)
+                {
+                    v2tmp.x = Random.Range(level.fLeftMinX, level.fLeftMaxX);
+                } else
+                {
+                    v2tmp.x = Random.Range(level.fRightMinX, level.fRightMaxX);
+                }
+                
+                if (numberOfReversePlatforms > 0 && Random.Range(0, 100) > 80)
+                {
+                    newPlatform = Instantiate(goPlatformReverse, v2tmp, Quaternion.identity);
+                    numberOfReversePlatforms--;
+                } else
+                {
+                    newPlatform = Instantiate(goPlatform, v2tmp, Quaternion.identity);
+                }
+
+                newPlatform.transform.localScale = new Vector3(level.fScale, newPlatform.transform.localScale.y);
+                newPlatform.transform.parent = tPlatformParent;
+
+                fLastY += level.fTresholdY;
             }
 
-            newPlatform.transform.localScale = new Vector3(Random.Range(fScaleMinMultiplier, fScaleMaxMultiplier), newPlatform.transform.localScale.y);
-            newPlatform.transform.parent = tPlatformParent;
+            v2tmp.y = fLastY;
+            v2tmp.x = 0f;
 
-            fLastY += fTresholdY;
+            newPlatform = Instantiate(goPlatformEnd, v2tmp, Quaternion.identity);
+            newPlatform.transform.parent = tPlatformParent;
         }
     }
 }

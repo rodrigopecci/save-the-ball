@@ -10,7 +10,7 @@ public class SoundManager : MonoBehaviour
     private AudioSource soundFX;
 
     [SerializeField]
-    private AudioClip jumpClip, gameOverClip;
+    private AudioClip jumpClip, finishClip, gameOverClip;
 
     private void Awake()
     {
@@ -25,6 +25,15 @@ public class SoundManager : MonoBehaviour
         if (!GameManager.instance.bGamePaused)
         {
             soundFX.clip = jumpClip;
+            soundFX.Play();
+        }
+    }
+
+    public void FinishSoundFX()
+    {
+        if (!GameManager.instance.bGamePaused)
+        {
+            soundFX.clip = finishClip;
             soundFX.Play();
         }
     }
